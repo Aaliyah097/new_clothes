@@ -57,7 +57,7 @@
 - **products** grouping **by variants**
 - **primary image** mechanism
 - **export** catalog **in .csv**
-- lines **coloring**
+- lines **coloring**, **overridden** admin **template**
 - filtering, searching and so on
 
 # Dependencies
@@ -70,6 +70,7 @@
 - nginx
 - docker-compose
 - tasks
+- alembic
 
 
 > Flask's **circular imports** are awful...sry
