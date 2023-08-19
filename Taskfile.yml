@@ -1,0 +1,22 @@
+version: '3'
+
+env:
+  testvar: "hello world"
+
+tasks:
+  rerun:
+    desc: "остановка, гит, запуск"
+    cmds:
+      - git pull
+      - kill $(lsof -t -i:5000)
+      - gunicorn --keyfile arcane-switch.com.key --certfile arcane-switch.com.crt -w 8 -b 0.0.0.0:5000 'app:app'
+
+  run:
+    desc: "запуск"
+    cmds:
+      - gunicorn --keyfile arcane-switch.com.key --certfile arcane-switch.com.crt -w 8 -b 0.0.0.0:5000 'app:app'
+
+  stop:
+    desc: "остановка"
+    cmds:
+      - kill $(lsof -t -i:5000)

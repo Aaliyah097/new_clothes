@@ -1,0 +1,46 @@
+version: '3'
+
+
+# хранилища
+# volumes:
+#     pgdata:
+#         driver: local
+services:
+    nginx:
+        restart: always # при падении будет стараться подняться
+        image: nginx:latest # только свежий nginx
+        #expose:
+        #   - 8080 # слушает порт 8080
+#        expose:
+#            - 5000
+        ports:
+          - "80:80"  # мапаем порт 80 на его 80. Тогда сайт будет доступен по адресу localhost. Убедись, что порт у тебя не занят.
+          - "443:443"
+        volumes: # монтируем только те директории, в которых лежит статика, т.к. nginx с динамикой не будет работать. Также директорию с логами и файл настройки, который мы подготовили.
+            - ./static:/srv/www/clothes/static
+            - ./logs:/srv/www/story/logs
+            - ./nginx:/etc/nginx/conf.d
+            - ./ssl-keys/:/etc/ssl/clothes
+        depends_on: # и nginx зависит от контейнера python. Т.е. python должен быть запущен первым
+            - python
+        networks:
+            - new_backend
+    python:
+        restart: always # режим  запуска перезапуска при падении
+        # stdin_open: true # docker run -i
+        build:
+            context: .
+            dockerfile: docker/Dockerfile # монтируем директорию проекта
+        volumes:
+            - ./:/srv/www/clothes
+        expose:
+          - 5000
+        # ports:
+        #     - 8000:8000
+        networks:
+            - new_backend
+        command: "gunicorn -w 8 -b 0.0.0.0:5000 'app:app'" # запускаем gunicorn
+        # command: python manage.py runserver 0.0.0.0:8000
+networks:
+  new_backend:
+    driver: bridge
