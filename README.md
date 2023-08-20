@@ -6,21 +6,21 @@
 - Brands
   - id
   - title
-  - products: M2M backref
+  - products: backref
   - logo
 - Sizes
   - id
   - literal
   - numeric
-  - products: M2M backref
+  - products: backref
 - Colors
   - id
   - name
-  - products: M2M backref
+  - products: backref
 - Categories
   - id
   - title
-  - products: M2M backref
+  - products: backref
 - Products
   - id
   - is_parent
@@ -40,8 +40,8 @@
   - price
   - quantity
   - price_old
-  - children: M2M backref
-  - images: M2M backref
+  - children: backref
+  - images: backref
   - color_id
   - size_id
 - Images
